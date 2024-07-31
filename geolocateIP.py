@@ -38,16 +38,18 @@ def get_position(ip_address):
     Output : Latitude and Longitude of the address (List)
              Print : Country, Latitude and Longitude of the address
     '''
-    request_url = 'https://geolocation-db.com/jsonp/' + ip_address
-    response = requests.get(request_url)
-    result = response.content.decode()
-    result = str(result).split(",")
-    print (result[1], end=" ")
+    request_url = 'https://ipapi.co/' + ip_address + '/json/'
+    response = requests.get(request_url).json()
+    location_data = {
+        "region": response.get("region"),
+        "country": response.get("country_name"),
+        "lat": response.get("latitude"),
+        "long": response.get("longitude")
+    }
+    print (location_data['country'] + location_data['region'], end=" ")
     lat_long = []
-    lat_long.append(result[4])
-    lat_long.append(result[5])
-    lat_long[0] = float(lat_long[0].replace('"latitude":','').replace("'",'').strip())
-    lat_long[1] = float(lat_long[1].replace('"longitude":','').replace("'",'').strip())
+    lat_long.append(location_data["lat"])
+    lat_long.append(location_data["long"])
     print("Latitude :", lat_long[0], "longitude :", lat_long[1])
     return lat_long
 
